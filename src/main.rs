@@ -1,12 +1,15 @@
 use std::{
+    env,
     io::{self, Write},
     process::{Command, Stdio, exit},
 };
 
+pub mod dirs;
+pub mod prompt;
+
 fn main() {
     loop {
-        print!("hexsh> ");
-        io::stdout().flush().unwrap();
+        prompt::print();
 
         let mut input = String::new();
         if io::stdin().read_line(&mut input).is_err() {
