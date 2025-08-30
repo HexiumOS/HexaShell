@@ -1,6 +1,5 @@
 use std::{
-    env,
-    io::{self, Write},
+    io::{self},
     process::{Command, Stdio, exit},
 };
 
