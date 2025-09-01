@@ -1,4 +1,5 @@
 use std::{
+    env,
     io::{self},
     process::{Command, Stdio, exit},
 };
@@ -20,16 +21,28 @@ fn main() {
             continue;
         }
 
-        if input.trim() == "exit" {
-            exit(0);
-        }
-
         let mut parts = input.split_whitespace();
         let command = match parts.next() {
             Some(cmd) => cmd,
             None => continue,
         };
         let args: Vec<&str> = parts.collect();
+
+        if command == "exit" {
+            exit(0);
+        }
+
+        if command == "cd" {
+            let new_dir: String = if let Some(dir) = args.get(0) {
+                dir.to_string()
+            } else {
+                env::var("HOME").unwrap_or_else(|_| "/".to_string())
+            };
+            if let Err(e) = env::set_current_dir(&new_dir) {
+                eprintln!("cd: {}: {}", new_dir, e);
+            }
+            continue;
+        }
 
         let mut child = match Command::new(command)
             .args(&args)
